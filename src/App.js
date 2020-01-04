@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import SearchBar from "./components/SearchBar";
+import List from "./components/List";
+import { searchQuery } from "./api/hackerNews";
+import { connect } from "react-redux";
+import { addQuery } from "./redux/actionCreators";
 
-function App() {
+function App({ queries, addQuery }) {
+  const [queryResults, setQueryResults] = useState([]);
+
+  const handleQuerySubmit = async query => {
+    const response = await searchQuery(query);
+    const results = response.hits
+      .filter(hit => hit.title)
+      .map(hit => (hit.title ? hit.title : null));
+
+    setQueryResults(results);
+    addQuery(query);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>RTS Labs Coding Exercise</h1>
+      <SearchBar
+        onQuery={handleQuerySubmit}
+        placeholder="Search Hacker News..."
+      />
+      <h1>Results</h1>
+      <List items={queryResults} />
+      <h1>Previous Queries</h1>
+      <List items={queries} />
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = state => {
+  const queries = state.queries;
+
+  return { queries };
+};
+
+const mapDispatchToProps = { addQuery };
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

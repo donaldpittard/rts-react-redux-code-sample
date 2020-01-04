@@ -5,7 +5,7 @@ to query the Hacker news API. Instructions on getting
 the application up and running are below.
 
 You can also visit this heroku link to view the app live:
-[Heroku Demo](https://rts-react-redux-code-exercise.herokuapp.com/)
+[Heroku Demo](http://rts-react-redux-code-exercise.herokuapp.com/)
 
 In the project directory, you can run:
 
